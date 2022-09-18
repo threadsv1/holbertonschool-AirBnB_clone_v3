@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""api link"""
+""" Status of your API """
 
 from flask import Flask, jsonify
 from models import storage
@@ -16,13 +16,13 @@ cors = CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 
 @app.teardown_appcontext
 def teardown_appcontext(self):
-    """Close current session"""
+    """Close down current session."""
     storage.close()
 
 
 @app.errorhandler(404)
 def page_not_found(error):
-    """Return a JSON-formatted 404 """
+    """Return a JSON-formatted 404 status code response."""
     return (jsonify({"error": "Not found"}), 404)
 
 

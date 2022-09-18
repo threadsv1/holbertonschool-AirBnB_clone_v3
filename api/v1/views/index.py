@@ -1,33 +1,29 @@
 #!/usr/bin/python3
-"""index"""
+""" index """
+
+from flask import jsonify
 from api.v1.views import app_views
-from flask import Flask, Blueprint, jsonify
 from models import storage
 
 
-hbnbText = {
-    "amenities": "Amenity",
-    "cities": "City",
-    "places": "Place",
-    "reviews": "Review",
-    "states": "State",
-    "users": "User"
-}
+@app_views.route('/status')
+def status():
+    """Return status in JSON."""
+    return jsonify(status="OK")
 
 
-@app_views.route('/status', strict_slashes=False)
-def hbnbStatus():
-    """hbnbStatus"""
-    return jsonify({"status": "OK"})
-
-
-@app_views.route('/stats', strict_slashes=False)
-def hbnbStats():
-    """hbnbStats"""
-    return_dict = {}
-    for key, value in hbnbText.items():
-        return_dict[key] = storage.count(value)
-    return jsonify(return_dict)
-
-if __name__ == "__main__":
-    pass
+@app_views.route('/stats')
+def stat():
+    """Endpoint that retrieves the number of objs by type."""
+    classes = {
+        "amenities": "Amenity",
+        "cities": "City",
+        "places": "Place",
+        "reviews": "Review",
+        "states": "State",
+        "users": "User"
+    }
+    counter = {}
+    for s in classes:
+        counter[s] = storage.count(classes[s])
+    return jsonify(counter)
